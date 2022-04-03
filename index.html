@@ -59,6 +59,7 @@ svg.append("g")
           .text('Subzone: ' + d.properties["Subzone Name"])
           .style("left",(event.pageX)+"px")
           .style("top",(event.pageY)+"px")
+      d3.select(event.currentTarget)
           .attr("fill","red")
           .attr('fill-opacity','1.0')
     });
