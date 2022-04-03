@@ -45,7 +45,10 @@ var projection = d3.geoMercator()
 
 let geopath = d3.geoPath().projection(projection);
 
-console.log(pop[10].Population);
+var popData={};
+for (let i=0; i<pop.length; i++) {
+  popData[pop[i].Subzone]=Math.round(pop[i].Population);
+}
 
 svg.append("g")
     .attr("id", "districts")
@@ -58,7 +61,7 @@ svg.append("g")
     .attr("fill-opacity","0.6")
     .on("mouseover",(event,d) => {
       d3.select(".tooltip")
-          .text('Subzone: ' + d.properties["Subzone Name"] + pop.Population)
+          .text('Subzone: ' + d.properties["Subzone Name"] + popData[d.properties["Subzone Name"]])
           .style("left",(event.pageX)+"px")
           .style("top",(event.pageY)+"px")
       d3.select(event.currentTarget)
