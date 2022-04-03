@@ -56,7 +56,7 @@ svg.append("g")
     .attr("fill-opacity","0.6")
     .on("mouseover",(event,d) => {
       d3.select(".tooltip")
-          .text('Subzone: ' + d.properties["Subzone Name"])
+          .text('Subzone: ' + area.properties["Subzone Name"])
           .style("left",(event.pageX)+"px")
           .style("top",(event.pageY)+"px")
       d3.select(event.currentTarget)
