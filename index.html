@@ -53,6 +53,7 @@ svg.append("g")
     .append("path")
     .attr("d", geopath)
     .attr("fill", "black")
+    .attr("fill-opacity","0.6")
     .on("mouseover",(event,d) => {
       d3.select(".tooltip")
           .text('Subzone: ' + d.properties["Subzone Name"])
