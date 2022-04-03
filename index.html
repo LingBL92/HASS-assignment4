@@ -2,10 +2,21 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <style></style>
+  <<title>Singapore Population 2021</title>
+  <style>
+
+    .tooltip {
+      position: absolute;
+      text-align: left;
+    }
+
+  </style>
 </head>
+
 <body>
 <svg></svg>
+<div class="tooltip tooltip-area"></div>
+
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 
@@ -22,24 +33,32 @@ let svg = d3.select("svg")
 // Load external data and boot
 Promise.all([d3.json(map), d3.csv(csv)]).then(data => {
 
-console.log(data[0]);
-console.log(data[1]);
+//console.log(data[0]);
+//console.log(data[1]);
+  let area=data[0];
+  let pop=data[1];
 
 // Map and projection
 var projection = d3.geoMercator()
     .center([103.851959, 1.290270])
-    .fitExtent([[20, 20], [980, 580]], data[0]);
+    .fitExtent([[20, 20], [980, 580]], data[0]); //fit to sgmap.json
 
 let geopath = d3.geoPath().projection(projection);
 
 svg.append("g")
     .attr("id", "districts")
     .selectAll("path")
-    .data(data[0].features)
+    .data(area.features)
     .enter()
     .append("path")
     .attr("d", geopath)
-    .attr("fill", "black");
+    .attr("fill", "black")
+    .on("mouseover",(event,d) => {
+      d3.select(".tooltip")
+          .text('test')
+          .style("left",(event.pageX)+"px")
+        
+    });
 })
 
 </script>
