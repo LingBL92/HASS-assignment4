@@ -34,7 +34,7 @@ let svg = d3.select("svg")
 Promise.all([d3.json(map), d3.csv(csv)]).then(data => {
 
 //console.log(data[0]);
-console.log(data[1]);
+//console.log(data[1]);
   let area=data[0];
   let pop=data[1];
 
@@ -56,7 +56,7 @@ svg.append("g")
     .attr("fill-opacity","0.6")
     .on("mouseover",(event,d) => {
       d3.select(".tooltip")
-          .text('Subzone: ' + d.properties["Subzone Name"] + '<br>'+pop.Population[0])
+          .text('Subzone: ' + d.properties["Subzone Name"] + '<br>'+pop.Population)
           .style("left",(event.pageX)+"px")
           .style("top",(event.pageY)+"px")
       d3.select(event.currentTarget)
