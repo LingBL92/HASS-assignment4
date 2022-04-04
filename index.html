@@ -8,6 +8,15 @@
     .tooltip {
       position: absolute;
       text-align: left;
+      padding: 5px;
+
+    }
+
+    svg {
+      background-color: lightsteelblue;
+      display: block;
+      stroke: black;
+      stroke-width: 1px;
     }
 
   </style>
@@ -46,11 +55,16 @@ var projection = d3.geoMercator()
 let geopath = d3.geoPath().projection(projection);
 
 var popData={};
-for (let i=0; i<pop.length; i++) {
-  popData[pop[i].Subzone]=Math.round(pop[i].Population)
+for (var i=0; i<pop.length; i++) {
+  // adding toUpperCase() lets the calling be easier downstream
+  popData[pop[i].Subzone.toUpperCase()]=Math.round(pop[i].Population);
 }
 
-console.log(popData)
+const colorscale = d3.scaleLinear()
+  .domain([0,90000])
+  .range([200,0]);
+
+console.log()
 
 svg.append("g")
     .attr("id", "districts")
@@ -58,24 +72,34 @@ svg.append("g")
     .data(area.features)
     .enter()
     .append("path")
-    .attr("d", geopath)
-    .attr("fill", "black")
-    .attr("fill-opacity","0.6")
+      .attr("d", geopath)
+      //.attr("fill", "black")
+      .attr("fill", function(d) {
+        var color=Math.round(colorscale(popData[d.properties["Subzone Name"].toUpperCase()]))
+        return 'rgb('+color+','+color+','+color+')'
+      })
+    //.attr("fill-opacity","0.6")
     .on("mouseover",(event,d) => {
       d3.select(".tooltip")
-          .text('Subzone: ' + d.properties["Subzone Name"] + popData[d.properties["Subzone Name"]])
+          .text(d.properties["Subzone Name"]+'<br>' +
+                'Population: ' + popData[d.properties["Subzone Name"]])
+          .style('background-color','yellow')
           .style("left",(event.pageX)+"px")
           .style("top",(event.pageY)+"px")
       d3.select(event.currentTarget)
-          .attr("fill","red")
-          .attr('fill-opacity','1.0')
+          //.attr("fill","red")
+          .attr('stroke','red')
+          .attr('stroke-width','5')
+          //.attr('fill-opacity','1.0')
     })
     .on("mouseout",(event,d) => {
       d3.select(".tooltip")
           .text("")
       d3.select(event.currentTarget)
-          .attr("fill","black")
-          .attr('fill-opacity','0.6')
+          //.attr("fill","black")
+          .attr('stroke','black')
+          .attr('stroke-width','1')
+          //.attr('fill-opacity','0.6')
     });
 })
 
