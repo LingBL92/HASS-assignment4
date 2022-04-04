@@ -50,6 +50,8 @@ for (let i=0; i<pop.length; i++) {
   popData[pop[i].Subzone]=Math.round(pop[i].Population)
 }
 
+console.log(popData)
+
 svg.append("g")
     .attr("id", "districts")
     .selectAll("path")
