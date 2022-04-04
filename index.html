@@ -48,8 +48,9 @@ let geopath = d3.geoPath().projection(projection);
 var popData={};
 for (let i=0; i<pop.length; i++) {
   popData[pop[i].Subzone]=Math.round(pop[i].Population)
-  console.log(popData[d.properties["Subzone Name"]])
 }
+
+var w = 400, h = 400, r = 200, color = d3.scale.category20c();
 
 svg.append("g")
     .attr("id", "districts")
@@ -58,7 +59,8 @@ svg.append("g")
     .enter()
     .append("path")
     .attr("d", geopath)
-    .attr("fill", "black")
+    //.attr("fill", "black")
+    .attr("fill", function(d,i) {return color(i)})
     .attr("fill-opacity","0.6")
     .on("mouseover",(event,d) => {
       d3.select(".tooltip")
