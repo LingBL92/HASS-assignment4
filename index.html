@@ -13,10 +13,10 @@
     }
 
     svg {
-      background-color: lightsteelblue;
+      background-color: #D4E8E9;
       display: block;
       stroke: black;
-      stroke-width: 1px;
+      stroke-width: 0.5px;
     }
 
   </style>
@@ -60,11 +60,20 @@ for (var i=0; i<pop.length; i++) {
   popData[pop[i].Subzone.toUpperCase()]=Math.round(pop[i].Population);
 }
 
-const colorscale = d3.scaleLinear()
-  .domain([0,90000])
-  .range([200,50]);
+const colorbar=['rgb(0,52,245)','rgb(0,109,167)','rgb(59,140,99)',
+                'rgb(74,168,18)','rgb(145,185,25)','rgb(207,199,38)',
+                'rgb(252,196,41)','rgb(255,158,26)','rgb(255,115,10)','rgb(253,48,0)']
 
-console.log()
+/*const colorscale = d3.scaleLinear()
+  .domain([0,90000])
+  .range([0,9]);*/
+
+var numRange=[10,100,1000,5000,10000,20000,30000,50000,70000,90000]
+const colorscale=d3.scaleThreshold()
+  .domain(numRange)
+  .range(colorbar);
+
+console.log(d3.schemeOrRd[6])
 
 svg.append("g")
     .attr("id", "districts")
@@ -75,32 +84,60 @@ svg.append("g")
       .attr("d", geopath)
       //.attr("fill", "black")
       .attr("fill", function(d) {
-        var color=Math.round(colorscale(popData[d.properties["Subzone Name"].toUpperCase()]))
-        return 'rgb('+color+','+color+','+color+')'
+        //var color=Math.round(colorscale(popData[d.properties["Subzone Name"].toUpperCase()]))
+        var color=(colorscale(popData[d.properties["Subzone Name"].toUpperCase()]))
+        return color
       })
     //.attr("fill-opacity","0.6")
     .on("mouseover",(event,d) => {
       d3.select(".tooltip")
           .text(d.properties["Subzone Name"] +
-                '<br>Population: ' + popData[d.properties["Subzone Name"].toUpperCase()])
-          .style('background-color','yellow')
-          .style("left",(event.pageX)+"px")
+                ' | Population: ' + popData[d.properties["Subzone Name"].toUpperCase()])
+          .style('background-color','white')
+          .style('opacity','0.9')
+          .style("left",(event.pageX)+20+"px")
           .style("top",(event.pageY)-10+"px")
       d3.select(event.currentTarget)
           //.attr("fill","red")
-          .attr('stroke','red')
+          .attr('stroke','pink')
           .attr('stroke-width','5')
           //.attr('fill-opacity','1.0')
     })
     .on("mouseout",(event,d) => {
       d3.select(".tooltip")
           .text("")
+          .style('opacity','0')
       d3.select(event.currentTarget)
           //.attr("fill","black")
           .attr('stroke','black')
           .attr('stroke-width','1')
           //.attr('fill-opacity','0.6')
     });
+
+for (var i=0; i<colorbar.length; i++){
+  svg.append("circle")
+    .attr('cx',900)
+    .attr('cy',390+i*20)
+    .attr('r',9)
+    .style('fill',colorbar[i])
+  svg.append("text")
+    .attr('x',915)
+    .attr('y',390+i*20)
+    .text(numRange[i])
+    .style('font-size','12px')
+    .attr('alignment-baseline','middle')
+    .attr('text-anchor','start')
+    .attr('stroke-width','0')
+}
+svg.append('text')
+  .attr('x',890)
+  .attr('y',370)
+  .text('Legend')
+  .style('font-size','14px')
+  .attr('alignment-baseline','middle')
+  .attr('text-anchor','start')
+  .attr('stroke-width','0')
+
 })
 
 </script>
