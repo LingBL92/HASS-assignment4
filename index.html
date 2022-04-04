@@ -62,7 +62,7 @@ for (var i=0; i<pop.length; i++) {
 
 const colorscale = d3.scaleLinear()
   .domain([0,90000])
-  .range([200,0]);
+  .range([200,50]);
 
 console.log()
 
@@ -81,11 +81,11 @@ svg.append("g")
     //.attr("fill-opacity","0.6")
     .on("mouseover",(event,d) => {
       d3.select(".tooltip")
-          .text(d.properties["Subzone Name"]+'<br>' +
-                'Population: ' + popData[d.properties["Subzone Name"]])
+          .text(d.properties["Subzone Name"] +
+                '<br>Population: ' + popData[d.properties["Subzone Name"].toUpperCase()])
           .style('background-color','yellow')
           .style("left",(event.pageX)+"px")
-          .style("top",(event.pageY)+"px")
+          .style("top",(event.pageY)-10+"px")
       d3.select(event.currentTarget)
           //.attr("fill","red")
           .attr('stroke','red')
